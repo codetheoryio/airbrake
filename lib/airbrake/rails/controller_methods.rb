@@ -19,11 +19,13 @@ module Airbrake
       private
 
       def to_hash(params)
-        # Rails <= 4
-        return params.to_hash if Rails.version < "5.0.0"
-
-        # Rails >= 5
-        params.to_unsafe_h
+        if defined?(::Rails.version) && ::Rails.version < "5.0.0"
+          # Rails <= 4
+          params.to_hash
+        else
+          # Rails >= 5
+          params.to_unsafe_h
+        end
       end
 
       # This method should be used for sending manual notifications while you are still
